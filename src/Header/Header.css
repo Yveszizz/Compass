@@ -1,11 +1,8 @@
-.App {
-  text-align: center;
-      height: 10vh;
-}
 
 .App-logo {
   height: 8vmin;
   pointer-events: none;
+    align-self: center;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -16,16 +13,12 @@
 
 .App-header {
     border: white solid 1px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  //font-size: calc(10px + 2vmin);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    //font-size: calc(10px + 2vmin);
     font-size: 20px;
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
+    color: white;
 }
 
 @keyframes App-logo-spin {
