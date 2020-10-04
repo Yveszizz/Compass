@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './App.css';
 import Header from './Header/Header';
 import { Map, GoogleApiWrapper } from 'google-maps-react';
+import SearchPos from './Map/Search/SearchPos';
 
 class App extends Component {
     
@@ -10,11 +11,12 @@ class App extends Component {
         <div>
             <Header />
             <Map
-              google={this.props.google}
-              zoom={8}
-              //style={mapStyles}
-              //initialCenter={{ lat: 47.444, lng: -122.176}}
-            />
+                google={this.props.google}
+                zoom={8}
+                //style={mapStyles}
+                initialCenter={{ lat:48.866667, lng:  2.333333}} />
+            <SearchPos />
+            <p>ok</p>
         </div>
         )
     }
