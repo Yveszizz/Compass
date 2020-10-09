@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import './Map.css';
+//import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'react-google-map';
 import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 import SearchPos from './Search/SearchPos';
-import { GoogleMapsAPI } from '../client-config';
+//import { GoogleMapsAPI } from '..../client-config';
+export const GoogleMapsAPI='AIzaSyAfxtvx4AVwE5IuSH57EtkpW3CtGwMCtW4'
 
 class MapContainer extends Component {
     state = {
@@ -37,7 +39,7 @@ class MapContainer extends Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: GoogleMapsAPI;
+  apiKey: GoogleMapsAPI
 })(MapContainer)
 
 
