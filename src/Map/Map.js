@@ -4,7 +4,7 @@ import './Map.css';
 import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 import SearchPos from './Search/SearchPos';
 //import { GoogleMapsAPI } from '..../client-config';
-export const GoogleMapsAPI='AIzaSyAfxtvx4AVwE5IuSH57EtkpW3CtGwMCtW4'
+export const GoogleMapsAPI=''
 
 class MapContainer extends Component {
     state = {
