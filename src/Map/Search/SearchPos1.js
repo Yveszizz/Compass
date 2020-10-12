@@ -3,70 +3,47 @@ import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete";
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxPopover,
+  ComboboxList,
+  ComboboxOption,
+} from "@reach/combobox";
 
+import "@reach/combobox/styles.css";
 
-const PlacesAutocomplete = () => {
-  const {
-    ready,
-    value,
-    suggestions: { status, data },
-    setValue,
-    clearSuggestions,
-  } = usePlacesAutocomplete({
-    requestOptions: {
-      /* Define search scope here */
-    },
-    debounce: 300,
-  });
- 
-  const handleInput = (e) => {
-    // Update the keyword of the input element
-    setValue(e.target.value);
-  };
- 
-  const handleSelect = ({ description }) => () => {
-    setValue(description, false);
-    clearSuggestions();
- 
-    // Get latitude and longitude via utility functions
-    getGeocode({ address: description })
-      .then((results) => getLatLng(results[0]))
-      .then(({ lat, lng }) => {
-        console.log("📍 Coordinates: ", { lat, lng });
-      })
-      .catch((error) => {
-        console.log("😱 Error: ", error);
-      });
-  };
- 
-  const renderSuggestions = () =>
-    data.map((suggestion) => {
-      const {
-        id,
-        structured_formatting: { main_text, secondary_text },
-      } = suggestion;
- 
-      return (
-        <li key={id} onClick={handleSelect(suggestion)}>
-          <strong>{main_text}</strong> <small>{secondary_text}</small>
-        </li>
-      );
-    });
- 
-  return (
-    <div >
-      <input 
-        className="search-bar-input"
-        value={value}
-        onChange={handleInput}
-        disabled={!ready}
-        placeholder="Where are you going?" />
-      
-      {/* We can use the "status" to decide whether we should display the dropdown or not */}
-      {status === "OK" && <ul>{renderSuggestions()}</ul>
+function Search() {
+    const {ready, values, suggestions: {status, data}, setValue, clearSuggestion} = usePlacesAutocomplete({
+        requestOptions: {
+            location:{lat: () => 48.866667, lng: ()=> 2.333333 },
+            radius: 100*1000,
         }
-    </div>
-  );
-};
+    })
+    
+   return (
+        <div className="search">
+            <Combobox 
+                onSelect={(adress)=>{
+                    console.log(adress);
+                }}
+            >
+                <ComboboxInput 
+                    value={values} 
+                    onChange={(e)=> {
+                        setValue(e.target.value)
+                    }}
+                    disable={!ready}
+                    placeholder="Enter a adress"
+                />
+                <ComboboxPopover>
+                    {status === "OK" && data.map (({id, description}) => (
+                        <ComboboxOption key={id} value={description} />
+                    ))}
+                </ComboboxPopover>
+            </Combobox>
+        </div>
+    )
+}
 
-export default PlacesAutocomplete;
+export default Search;

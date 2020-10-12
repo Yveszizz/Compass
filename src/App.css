@@ -13,3 +13,23 @@
 
 .center {
 }
+
+.search {
+  position: absolute;
+  margin-top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 400px;
+  z-index: 10;
+    border-radius: 300px;
+}
+
+.search input {
+    padding: 0.5rem;
+    padding-left: 30px;
+    font-size: 1.5rem;
+    width: 100%;
+    border-radius: 300px;
+    border: 1px solid grey;
+}
