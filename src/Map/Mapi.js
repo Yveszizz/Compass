@@ -31,7 +31,7 @@ const styleInfoWindows = {
  
 export default function Mapi(){
     const {isLoaded, loadError} = useLoadScript({
-        googleMapsApiKey: '',
+        googleMapsApiKey: 'AIzaSyAy_4a7kgistUKB63UMYARp1uU8rmoZZmM',
         libraries,
     });
     
@@ -97,16 +97,22 @@ export default function Mapi(){
 function Search() {
     const {ready, values, suggestions: {status, data}, setValue, clearSuggestion} = usePlacesAutocomplete({
         requestOptions: {
-            location:{lat: () => 48.866667, lng: ()=> 2.333333 },
-            radius: 100*1000,
-        }
-    })
+            location:{lat: () => 48.866667, lng: () => 2.333333 },
+            radius: 200*1000,
+        },
+    });
     
    return (
         <div className="search">
             <Combobox 
-                onSelect={(adress)=>{
-                    console.log(adress);
+                onSelect={async (address)=>{
+                    /*try {
+                        const results = await getGeocode({adress});
+                        console.log(results[0])
+                    } catch(error){
+                        console.log(adress);
+                    }*/
+                    console.log(address);
                 }}
             >
                 <ComboboxInput 
@@ -114,7 +120,7 @@ function Search() {
                     onChange={(e)=> {
                         setValue(e.target.value)
                     }}
-                    disable={ready.toString()}
+                    disable={!ready.toString()}
                     placeholder="Enter a adress"
                 />
                 <ComboboxPopover>
