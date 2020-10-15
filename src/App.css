@@ -33,3 +33,21 @@
     border-radius: 300px;
     border: 1px solid grey;
 }
+
+.locate {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    max-width: 400px;
+    z-index: 10;
+    bottom: 200px;
+    right: 10px;
+    border: none;
+    box-shadow: 1px 1px 1px rgb(161, 159, 159);
+    background-color: white;
+    border-radius: 1px;
+}
+.locate :hover {
+    color: green;
+    cursor: pointer;
+}
