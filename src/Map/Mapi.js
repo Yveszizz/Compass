@@ -1,22 +1,9 @@
 import React from 'react'
 import { GoogleMap, useLoadScript, Marker, InfoWindow, } from '@react-google-maps/api';
 import { formatRelative } from "date-fns";
-import usePlacesAutocomplete, {
-  getGeocode,
-  getLatLng,
-} from "use-places-autocomplete";
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxPopover, 
-  ComboboxList,
-  ComboboxOption,
-} from "@reach/combobox";
-
 import "@reach/combobox/styles.css";
-//import mapStyles from "./mapStyles";
-
-import compassPositionLogo from './compass.svg'
+import SearchPos1 from './Search/SearchPos1'
+import Locate from './Locate/Locate'
 
 const libraries = ["places"];
 const mapContainerStyle = {
@@ -31,9 +18,9 @@ const styleInfoWindows = {
     color:'black',
 }
  
-export default function Mapi(){
+export default function Mapi() {
     const {isLoaded, loadError} = useLoadScript({
-        googleMapsApiKey: 'AIzaSyBYJReoB3JOWyw8ZuIkpSfMLIFLHI1wsVA',
+        googleMapsApiKey: '',
         libraries,
     });
     
@@ -65,12 +52,17 @@ export default function Mapi(){
         mapRef.current.setZoom(15);
     },[])
 
+    const openModal = () => {
+        console.log('modal')
+        //modal.style.display = "none";
+    }
+
     if (loadError) return "Error Loading maps"
     if (!isLoaded) return "Loading maps"
     
     return (
         <div>
-            <Search panTo={panTo} />
+            <SearchPos1 panTo={panTo} />
             <Locate panTo={panTo} />
             <GoogleMap 
                 mapContainerStyle={mapContainerStyle} 
@@ -79,6 +71,12 @@ export default function Mapi(){
                 onClick={onMapClick}
                 onLoad={onMapLoad}
             >
+                <div className="modal" >
+                    <div className="modal-content">
+                        <span className="close">&times;</span>
+                    </div>
+                </div>
+
                 {markers.map(marker => 
                     <Marker
                         onClick={()=>{setSelected(marker)}}
@@ -91,7 +89,10 @@ export default function Mapi(){
                         position={{lat:selected.lat, lng:selected.lng}} 
                         onCloseClick={()=>{setSelected(null)}}
                          >
-                        <div style={styleInfoWindows}>
+                        <div 
+                            style={styleInfoWindows}
+                            onClick={openModal}
+                        >
                             <h2>Spot</h2>
                             <p>Spotted {formatRelative(selected.time, new Date())}</p>
                         </div>
@@ -101,65 +102,3 @@ export default function Mapi(){
         </div>
     )
 }
-
-function Locate({ panTo }) {
-    return (
-        <button className="locate" onClick={() => {
-            navigator.geolocation.getCurrentPosition(
-                (position)=>{
-                    panTo({
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    });
-                },
-                 () => null
-                 );
-        }} >
-            <img src={compassPositionLogo} alt="compass - locate me" />
-        </button>
-    )
-}
-
-function Search({ panTo }) {
-    const {ready, values, suggestions: {status, data}, setValue, clearSuggestions} = usePlacesAutocomplete({
-        requestOptions: {
-            location:{lat: () => 48.866667, lng: () => 2.333333 },
-            radius: 200*1000,
-        },
-    });
-    
-   return (
-        <div className="search">
-            <Combobox 
-                onSelect={async (address)=>{
-                    setValue(address, false);
-                    clearSuggestions();
-                    try {
-                        const results = await getGeocode({address});
-                        const { lat, lng } = await getLatLng(results[0]);
-                        panTo({ lat, lng })
-                    } catch(error){
-                        console.log('error');
-                    }
-                }}
-            >
-                <ComboboxInput 
-                    value={values} 
-                    onChange={(e)=> {
-                        setValue(e.target.value)
-                    }}
-                    disable={ "false" /*!ready.toString()*/}
-                    placeholder="Enter a adress"
-                />
-                <ComboboxPopover>
-                    <ComboboxList>
-                        {status === "OK" && data.map (({description, place_id}) => (
-                            <ComboboxOption value={description} key={place_id} />
-                        ))}
-                    </ComboboxList>
-                </ComboboxPopover>
-            </Combobox>
-        </div>
-    )
-}
-

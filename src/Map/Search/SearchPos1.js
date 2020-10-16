@@ -13,37 +13,49 @@ import {
 
 import "@reach/combobox/styles.css";
 
-function Search() {
-    const {ready, values, suggestions: {status, data}, setValue, clearSuggestion} = usePlacesAutocomplete({
+function SearchPos1({ panTo }) {
+    const {ready, values, suggestions: {status, data}, setValue, clearSuggestions} = usePlacesAutocomplete({
         requestOptions: {
-            location:{lat: () => 48.866667, lng: ()=> 2.333333 },
-            radius: 100*1000,
+            location:{lat: () => 48.866667, lng: () => 2.333333 },
+            radius: 200*1000,
+        },
+    });
+
+    const handleSelect = async (address) => {
+        setValue(address, false);
+        clearSuggestions();
+        try {
+            const results = await getGeocode({address});
+            const { lat, lng } = await getLatLng(results[0]);
+            panTo({ lat, lng })
+        } catch(error){
+            console.log('error');
         }
-    })
+    }
     
    return (
         <div className="search">
             <Combobox 
-                onSelect={(adress)=>{
-                    console.log(adress);
-                }}
+                onSelect={handleSelect}
             >
                 <ComboboxInput 
                     value={values} 
                     onChange={(e)=> {
                         setValue(e.target.value)
                     }}
-                    disable={!ready}
+                    disable={ "false" /*!ready.toString()*/}
                     placeholder="Enter a adress"
                 />
                 <ComboboxPopover>
-                    {status === "OK" && data.map (({id, description}) => (
-                        <ComboboxOption key={id} value={description} />
-                    ))}
+                    <ComboboxList>
+                        {status === "OK" && data.map (({description, place_id}) => (
+                            <ComboboxOption value={description} key={place_id} />
+                        ))}
+                    </ComboboxList>
                 </ComboboxPopover>
             </Combobox>
         </div>
     )
 }
 
-export default Search;
+export default SearchPos1
