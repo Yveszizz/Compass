@@ -4,6 +4,7 @@ import { formatRelative } from "date-fns";
 import "@reach/combobox/styles.css";
 import SearchPos1 from './Search/SearchPos1'
 import Locate from './Locate/Locate'
+import Modal from './Modal/Modal'
 
 const libraries = ["places"];
 const mapContainerStyle = {
@@ -71,11 +72,7 @@ export default function Mapi() {
                 onClick={onMapClick}
                 onLoad={onMapLoad}
             >
-                <div className="modal" >
-                    <div className="modal-content">
-                        <span className="close">&times;</span>
-                    </div>
-                </div>
+                <Modal />
 
                 {markers.map(marker => 
                     <Marker
